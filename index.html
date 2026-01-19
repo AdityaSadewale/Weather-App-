@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Weather App</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #74ebd5, #9face6);
+  }
+
+  .card {
+    width: 340px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    animation: fadeIn 1s ease;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  /* SEARCH BOX */
+  .search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 25px;
+  }
+
+  .search input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+  }
+
+  .search input:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 8px rgba(79,172,254,0.4);
+  }
+
+  .search button {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #4facfe, #00c6ff);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .search button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .weather {
+    animation: slideUp 0.8s ease;
+  }
+
+  img {
+    width: 90px;
+  }
+
+  #temp {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+
+  #condition {
+    color: #555;
+    font-size: 16px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>🌤 Weather App</h2>
+
+  <div class="search">
+    <input id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Search</button>
+  </div>
+
+  <div class="weather">
+    <h3 id="location">London, UK</h3>
+    <img id="icon">
+    <div id="temp">-- °C</div>
+    <div id="condition">--</div>
+  </div>
+</div>
+
+<script>
+  // 🔴 REPLACE WITH YOUR API KEY WHEN RUNNING LOCALLY
+  const apiKey = "YOUR_API_KEY_HERE";
+
+  // Load default city
+  window.onload = () => {
+    getWeather("London");
+  };
+
+  function getWeather(cityName) {
+    const city =
+      cityName || document.getElementById("city").value.trim();
+
+    if (!city) return;
+
+    fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=yes`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("location").innerText =
+          `${data.location.name}, ${data.location.country}`;
+
+        document.getElementById("temp").innerText =
+          `${data.current.temp_c} °C`;
+
+        document.getElementById("condition").innerText =
+          data.current.condition.text;
+
+        document.getElementById("icon").src =
+          "https:" + data.current.condition.icon;
+      })
+      .catch(() => alert("City not found"));
+  }
+</script>
+
+</body>
+</html>
