@@ -72,3 +72,4 @@ When you log in to a website using **Google Login**:
 
 ### 🧠 Conclusion
 An **API** is an essential part of modern software and web development. It helps applications **communicate, share information, and work together efficiently** 🌍💡.
+
